@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Analytics - Демо</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f3f4f6;color:#111827;display:flex;min-height:100vh}
+.sidebar{width:240px;min-height:100vh;background:#111827;color:#fff;position:fixed;left:0;top:0;overflow-y:auto}
+.sidebar h1{padding:24px;font-size:20px;border-bottom:1px solid #374151}
+.sidebar p{padding:0 24px 12px;font-size:11px;color:#9ca3af}
+.nb{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;background:none;border:none;color:#d1d5db;font-size:14px;cursor:pointer;text-align:left;transition:background .2s}
+.nb:hover{background:#1f2937}
+.nb.a{background:#2563eb;color:#fff}
+.main{margin-left:240px;padding:24px;width:calc(100% - 240px)}
+.main h2{font-size:24px;margin-bottom:4px}
+.sub{font-size:13px;color:#6b7280;margin-bottom:24px}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.k{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.1);border:1px solid #e5e7eb}
+.k label{font-size:13px;color:#6b7280;display:block;margin-bottom:4px}
+.k .v{font-size:28px;font-weight:700}
+.v.bl{color:#3b82f6}.v.rd{color:#ef4444}.v.yl{color:#f59e0b}.v.gr{color:#10b981}.v.pp{color:#8b5cf6}
+.card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.1);border:1px solid #e5e7eb;margin-bottom:24px}
+.card h3{font-size:18px;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:#f9fafb;text-align:left;padding:12px 16px;font-size:12px;text-transform:uppercase;color:#6b7280;border-bottom:1px solid #e5e7eb}
+td{padding:12px 16px;border-bottom:1px solid #f3f4f6}
+tr:hover td{background:#f9fafb}
+.badge{display:inline-block;padding:4px 12px;border-radius:9999px;font-size:12px;font-weight:500}
+.bg{background:#dcfce7;color:#166534}.br{background:#fee2e2;color:#991b1b}.by{background:#fef3c7;color:#92400e}
+.tr{color:#dc2626}.tg{color:#16a34a}.ty{color:#ca8a04}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{padding:8px 24px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer}
+.tg2{background:#16a34a;color:#fff}.tr2{background:#dc2626;color:#fff}.ti{background:#e5e7eb;color:#374151}
+.bc{display:flex;align-items:flex-end;gap:8px;height:200px;padding:16px 0;border-bottom:1px solid #e5e7eb}
+.bg2{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.bar{border-radius:4px 4px 0 0;min-height:4px;width:100%}
+.bl2{font-size:11px;color:#6b7280;margin-top:8px;text-align:center}
+.pi{display:flex;align-items:center;gap:24px}
+.pv{width:160px;height:160px;border-radius:50%;overflow:hidden}
+.pl{display:flex;flex-direction:column;gap:8px}
+.pli{display:flex;align-items:center;gap:8px;font-size:13px}
+.dot{width:12px;height:12px;border-radius:3px}
+.ii{padding:12px;border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;border:1px solid}
+.is{background:#f0fdf4;border-color:#bbf7d0}.il{background:#fef2f2;border-color:#fecaca}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="main" id="main"></main>
+<script>
+var PAGES=[
+{id:'dashboard',label:'Control Tower'},
+{id:'lost',label:'Потерянные сделки'},
+{id:'rankings',label:'Рейтинги'},
+{id:'funnel',label:'Воронка'},
+{id:'response',label:'Время ответа'},
+{id:'comm',label:'Коммуникация'},
+{id:'abandoned',label:'Брошенные'},
+{id:'office',label:'По офисам'},
+{id:'metrics',label:'Метрики РОП'}
+];
+var cur='dashboard',rtab='best';
+function fmt(n){return new Intl.NumberFormat('ru-RU').format(n)}
+function mon(n){return fmt(n)+'\u20BD'}
+function $(s){return document.querySelector(s)}
+var pages={};
+
+// RENDER NAV
+function renderNav(){
+var h='<h1>Sales Analytics</h1><p>Демо панель</p>';
+PAGES.forEach(function(p){h+='<button class="nb'+(p.id===cur?' a':'')+'" onclick="go(\''+p.id+'\')">'+p.label+'</button>'});
+h+='<div style="padding:16px;border-top:1px solid #374151;font-size:11px;color:#4b5563;margin-top:auto">v1.0.0 demo</div>';
+$('#sidebar').innerHTML=h;
+}
+function go(id){cur=id;renderNav();render()}
+function render(){var pg=PAGES.find(function(p){return p.id===cur});
+$('#main').innerHTML='<h2>'+(pg?pg.label:'')+'</h2><p class="sub">Демонстрация с моковыми данными</p>'+(pages[cur]?pages[cur]():'');}
+
+// ===== DASHBOARD =====
+pages.dashboard=function(){
+var pie=[{n:'SLA нарушение',v:128,c:'#ef4444'},{n:'Эмоции',v:85,c:'#f59e0b'},{n:'Техника',v:62,c:'#3b82f6'},{n:'Внешние',v:37,c:'#10b981'}];
+var tot=pie.reduce(function(s,d){return s+d.v},0);
+var deg=pie.reduce(function(a,d,i){var p=d.v/tot*360;a.push(d.c+' '+p+'deg');return a},[]);
+var bg='conic-gradient(';var cur2=0;pie.forEach(function(d){var p=d.v/tot*360;bg+=d.c+' '+cur2+'deg '+(cur2+p)+'deg, ';cur2+=p});bg=bg.slice(0,-2)+')';
+var fh='<div class="card"><h3>Причины потерь</h3><div class="pi"><div class="pv" style="background:'+bg+'"></div><div class="pl">'+pie.map(function(d){return '<div class="pli"><div class="dot" style="background:'+d.c+'"></div>'+d.n+' - '+d.v+' ('+(d.v/tot*100).toFixed(0)+'%)</div>'}).join('')+'</div></div></div>';
+
+var funnel=[{n:'Контакт',c:520,l:45},{n:'Квалиф.',c:380,l:52},{n:'Предлож.',c:245,l:68},{n:'Перегов.',c:85,l:72},{n:'Решение',c:17,l:15}];
+var mx=Math.max.apply(null,funnel.map(function(f){return f.c}));
+var bars='<div class="card"><h3>Воронка продаж</h3><div class="bc">'+funnel.map(function(f){return '<div class="bg2"><div class="bar" style="height:'+(f.c/mx*160)+'px;background:#3b82f6;opacity:.7"></div><div class="bar" style="height:'+(f.l/mx*160)+'px;background:#ef4444;opacity:.7;margin-top:-'+('')+  'px"></div><div class="bl2">'+f.n+'</div></div>'}).join('')+'</div><div style="display:flex;gap:24px;margin-top:12px;font-size:12px"><span style="color:#3b82f6">&#9632; Всего</span><span style="color:#ef4444">&#9632; Потери</span></div></div>';
+
+var dir=[{n:'Иванов А.С.',inf:'+25%',co:'78.5',st:'85%',sv:12},{n:'Петрова М.В.',inf:'+18%',co:'72.3',st:'72%',sv:8},{n:'Сидоров К.Л.',inf:'-5%',co:'65.1',st:'58%',sv:3}];
+var dt='<div class="card"><h3>Эффективность руководителей</h3><table><thead><tr><th>Руководитель</th><th>Влияние</th><th>Коучинг</th><th>Стабильн.</th><th>Спасено</th></tr></thead><tbody>'+dir.map(function(d){return '<tr><td class="font-medium">'+d.n+'</td><td class="'+(d.inf[0]==='+'?'tg':'tr')+'">'+d.inf+'</td><td>'+d.co+'</td><td>'+d.st+'</td><td class="tg font-medium">'+d.sv+'</td></tr>'}).join('')+'</tbody></table></div>';
+
+return '<div class="kg"><div class="k"><label>Всего сделок</label><div class="v bl">'+fmt(1247)+'</div></div><div class="k"><label>Потерянные</label><div class="v rd">'+fmt(312)+'</div></div><div class="k"><label>% потерь</label><div class="v yl">25%</div></div><div class="k"><label>Потерянная прибыль</label><div class="v pp">'+mon(4850000)+'</div></div></div><div class="g2">'+fh+bars+'</div>'+dt};
+
+// ===== LOST =====
+pages.lost=function(){
+var lost=[
+{cl:'ООО "Альфа-Строй"',m:'Петров И.',o:'Москва',b:'150 000',l:'15 000',r:'SLA',s:35,p:'Высокий',cr:'Да',d:'2024-02-10'},
+{cl:'ИП Сидоров',m:'Козлова А.',o:'СПб',b:'80 000',l:'8 000',r:'Эмоции',s:52,p:'Средний',cr:'Нет',d:'2024-02-05'},
+{cl:'ООО "Гамма"',m:'Новиков Г.',o:'Казань',b:'320 000',l:'32 000',r:'Техника',s:28,p:'Высокий',cr:'Да',d:'2024-03-01'},
+{cl:'ООО "Дельта"',m:'Смирнова А.',o:'Москва',b:'95 000',l:'9 500',r:'Внешние',s:65,p:'Низкий',cr:'Нет',d:'2024-03-15'},
+];
+return '<div class="kg"><div class="k"><label>Всего потерь</label><div class="v rd">'+lost.length+'</div></div><div class="k"><label>Сумма потерь</label><div class="v rd">'+lost.reduce(function(s,x){return s+x.l.replace(/\D/g,'')},0).toLocaleString()+' \u20BD</div></div><div class="k"><label>Топ причина</label><div class="v">SLA</div></div></div><div class="card"><h3>Все потерянные сделки</h3><table><thead><tr><th>Клиент</th><th>Менеджер</th><th>Офис</th><th>Бюджет</th><th>Потеряно</th><th>Причина</th><th>Оценка</th><th>Потенц.</th><th>Критич.</th><th>Дата</th></tr></thead><tbody>'+lost.map(function(x){return '<tr><td>'+x.cl+'</td><td>'+x.m+'</td><td>'+x.o+'</td><td>'+x.b+' \u20BD</td><td class="tr">'+x.l+' \u20BD</td><td>'+x.r+'</td><td class="'+(x.s<50?'tr':'tg')+'">'+x.s+'</td><td>'+x.p+'</td><td class="'+(x.cr==='Да'?'tr':'')+'">'+x.cr+'</td><td>'+x.d+'</td></tr>'}).join('')+'</tbody></table></div>'};
+
+// ===== RANKINGS =====
+pages.rankings=function(){
+var best=[{n:'Смирнова А.',o:'Москва',l:3,q:92,t:'8 мин'},{n:'Кузнецов П.',o:'Казань',l:5,q:88,t:'10 мин'},{n:'Иванов А.',o:'Москва',l:8,q:82,t:'12 мин'}];
+var worst=[{n:'Новиков Г.',o:'Самара',l:42,q:28,t:'90 мин'},{n:'Морозова Л.',o:'Москва',l:35,q:42,t:'70 мин'},{n:'Волков А.',o:'Казань',l:28,q:48,t:'55 мин'}];
+var data=rtab==='best'?best:worst;
+return '<div class="tabs"><button class="tab '+(rtab==='best'?'tg2':'ti')+'" onclick="rtab=\'best\';render()">Лучшие</button><button class="tab '+(rtab==='worst'?'tr2':'ti')+'" onclick="rtab=\'worst\';render()">Худшие</button></div><div class="card"><table><thead><tr><th>Менеджер</th><th>Офис</th><th>Потери</th><th>Качество</th><th>Время</th></tr></thead><tbody>'+data.map(function(x){return '<tr><td class="font-medium">'+x.n+'</td><td>'+x.o+'</td><td class="tr">'+x.l+'</td><td class="'+(x.q>=70?'tg':'tr')+'">'+x.q+'</td><td>'+x.t+'</td></tr>'}).join('')+'</tbody></table></div>'};
+
+// ===== FUNNEL =====
+pages.funnel=function(){
+var f=[{n:'Контакт',c:520,l:45},{n:'Квалификация',c:380,l:52},{n:'Предложение',c:245,l:68},{n:'Переговоры',c:85,l:72},{n:'Решение',c:17,l:15}];
+return '<div class="card"><table><thead><tr><th>Этап</th><th>Всего</th><th>Потеряно</th><th>% от общего</th><th>Конверсия</th></tr></thead><tbody>'+f.map(function(x,i){var pct=(x.c/f[0].c*100).toFixed(1);var conv=i>0?(x.c/f[i-1].c*100).toFixed(1):'100';return '<tr><td class="font-medium">'+x.n+'</td><td>'+x.c+'</td><td class="tr">'+x.l+'</td><td>'+pct+'%</td><td>'+conv+'%</td></tr>'}).join('')+'</tbody></table></div>'};
+
+// ===== RESPONSE =====
+pages.response=function(){
+var data=[{n:'Иванов А.',avg:'8 мин',med:'6 мин',sl:2,pct:'3.5%',s:'Норма'},{n:'Петрова М.',avg:'20 мин',med:'15 мин',sl:15,pct:'18.2%',s:'Внимание'},{n:'Сидоров К.',avg:'45 мин',med:'40 мин',sl:28,pct:'35.0%',s:'Внимание'},{n:'Новиков Г.',avg:'90 мин',med:'80 мин',sl:45,pct:'55.0%',s:'Критично'}];
+return '<div class="kg"><div class="k"><label>Среднее по компании</label><div class="v bl">15 мин</div></div><div class="k"><label>Медиана</label><div class="v gr">12 мин</div></div></div><div class="card"><table><thead><tr><th>Менеджер</th><th>Среднее</th><th>Медиана</th><th>SLA наруш.</th><th>%</th><th>Статус</th></tr></thead><tbody>'+data.map(function(x){var bc=x.s==='Нора'?'bg':x.s==='Внимание'?'by':'br';return '<tr><td class="font-medium">'+x.n+'</td><td>'+x.avg+'</td><td>'+x.med+'</td><td>'+x.sl+'</td><td>'+x.pct+'</td><td><span class="badge '+bc+'">'+x.s+'</span></td></tr>'}).join('')+'</tbody></table></div>'};
+
+// ===== COMM =====
+pages.comm=function(){
+var data=[{n:'Смирнова А.',avg:92,mn:78,mx:99},{n:'Иванов А.',avg:78,mn:55,mx:92},{n:'Кузнецов П.',avg:72,mn:45,mx:88},{n:'Петрова М.',avg:65,mn:30,mx:82},{n:'Сидоров К.',avg:45,mn:15,mx:70},{n:'Новиков Г.',avg:28,mn:5,mx:55}];
+return '<div class="card"><table><thead><tr><th>Менеджер</th><th>Средняя оценка</th><th>Мин</th><th>Макс</th></tr></thead><tbody>'+data.map(function(x){return '<tr><td class="font-medium">'+x.n+'</td><td class="'+(x.avg>=70?'tg':'tr')+'" style="font-weight:700">'+x.avg+'</td><td class="tr">'+x.mn+'</td><td class="tg">'+x.mx+'</td></tr>'}).join('')+'</tbody></table></div>'};
+
+// ===== ABANDONED =====
+pages.abandoned=function(){
+var data=[{cl:'ООО "Бета"',m:'Иванов А.',d:'2024-02-15',days:12,sl:5},{cl:'ИП Гамма',m:'Петрова М.',d:'2024-02-20',days:7,sl:3},{cl:'ООО "Эпсилон"',m:'Новиков Г.',d:'2024-03-01',days:15,sl:8}];
+return '<div class="card"><table><thead><tr><th>Клиент</th><th>Менеджер</th><th>Последнее сообщ.</th><th>Дней без ответа</th><th>SLA наруш.</th></tr></thead><tbody>'+data.map(function(x){return '<tr><td class="font-medium">'+x.cl+'</td><td>'+x.m+'</td><td>'+x.d+'</td><td class="tr" style="font-weight:600">'+x.days+' дн.</td><td>'+x.sl+'</td></tr>'}).join('')+'</tbody></table></div>'};
+
+// ===== OFFICE =====
+pages.office=function(){
+return '<div class="kg"><div class="k"><label>Сделки</label><div class="v bl">456</div></div><div class="k"><label>Потери</label><div class="v rd">98</div></div><div class="k"><label>% потерь</label><div class="v yl">21.5%</div></div><div class="k"><label>Прибыль</label><div class="v gr">1.5M \u20BD</div></div></div><div class="card"><h3>Сравнение офисов</h3><table><thead><tr><th>Офис</th><th>Сделки</th><th>Потери</th><th>% потерь</th><th>Качество</th></tr></thead><tbody><tr><td class="font-medium">Москва</td><td>456</td><td class="tr">98</td><td>21.5%</td><td>72</td></tr><tr><td class="font-medium">СПб</td><td>320</td><td class="tr">78</td><td>24.4%</td><td>68</td></tr><tr><td class="font-medium">Казань</td><td>280</td><td class="tr">55</td><td>19.6%</td><td>75</td></tr></tbody></table></div><div class="card"><h3>Менеджеры (Москва)</h3><table><thead><tr><th>Менеджер</th><th>Всего</th><th>Потери</th><th>Качество</th></tr></thead><tbody><tr><td>Иванов А.</td><td>85</td><td class="tr">12</td><td>78</td></tr><tr><td>Петрова М.</td><td>72</td><td class="tr">18</td><td>65</td></tr><tr><td>Сидоров К.</td><td>60</td><td class="tr">25</td><td class="tr">52</td></tr></tbody></table></div>'};
+
+// ===== METRICS =====
+pages.metrics=function(){
+return '<div class="kg"><div class="k"><label>Индекс влияния</label><div class="v gr">+25%</div></div><div class="k"><label>Стабильность</label><div class="v bl">82%</div></div><div class="k"><label>Спасённые</label><div class="v gr">12</div></div><div class="k"><label>Ошибки (тек.)</label><div class="v gr">32</div></div></div><div class="card"><h3>Вмешательства руководителя</h3><div class="ii is"><span class="font-medium">2024-02-15</span><span class="tg">Сделка спасена</span></div><div class="ii is"><span class="font-medium">2024-03-10</span><span class="tg">Сделка спасена</span></div><div class="ii il"><span class="font-medium">2024-03-28</span><span class="tr">Не спасена</span></div></div>'};
+
+// INIT
+renderNav();
+render();
+</script>
+</body>
+</html>
