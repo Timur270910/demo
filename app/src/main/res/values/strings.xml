@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Agent Client</string>
+    <string name="config_title">Configuration</string>
+    <string name="chat_title">Chat</string>
+    <string name="files_title">Files</string>
+    <string name="console_title">Console</string>
+    
+    <!-- SSH Settings -->
+    <string name="ssh_host">SSH Host</string>
+    <string name="ssh_port">SSH Port</string>
+    <string name="ssh_user">SSH User</string>
+    <string name="ssh_password">SSH Password</string>
+    <string name="ssh_connect">Connect</string>
+    <string name="ssh_disconnect">Disconnect</string>
+    <string name="ssh_connected">Connected</string>
+    <string name="ssh_disconnected">Disconnected</string>
+    
+    <!-- AI Settings -->
+    <string name="ai_base_url">AI Base URL</string>
+    <string name="ai_api_key">AI API Key</string>
+    <string name="ai_model">AI Model</string>
+    <string name="ai_save">Save Configuration</string>
+    <string name="ai_saved">Configuration saved</string>
+    
+    <!-- Chat -->
+    <string name="chat_send">Send</string>
+    <string name="chat_hint">Type your message...</string>
+    <string name="chat_clear">Clear</string>
+    
+    <!-- File Manager -->
+    <string name="file_upload">Upload</string>
+    <string name="file_download">Download</string>
+    <string name="file_delete">Delete</string>
+    <string name="file_create">Create</string>
+    
+    <!-- Console -->
+    <string name="console_execute">Execute</string>
+    <string name="console_hint">Enter command...</string>
+    <string name="console_clear">Clear Console</string>
+    
+    <!-- Common -->
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+</resources>
