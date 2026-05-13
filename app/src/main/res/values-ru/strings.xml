@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Agent Клиент</string>
+    <string name="config_title">Конфигурация</string>
+    <string name="chat_title">Чат</string>
+    <string name="files_title">Файлы</string>
+    <string name="console_title">Консоль</string>
+    
+    <!-- SSH Settings -->
+    <string name="ssh_host">SSH Хост</string>
+    <string name="ssh_port">SSH Порт</string>
+    <string name="ssh_user">SSH Пользователь</string>
+    <string name="ssh_password">SSH Пароль</string>
+    <string name="ssh_connect">Подключиться</string>
+    <string name="ssh_disconnect">Отключиться</string>
+    <string name="ssh_connected">Подключено</string>
+    <string name="ssh_disconnected">Отключено</string>
+    
+    <!-- AI Settings -->
+    <string name="ai_base_url">AI Базовый URL</string>
+    <string name="ai_api_key">AI API Ключ</string>
+    <string name="ai_model">AI Модель</string>
+    <string name="ai_save">Сохранить конфигурацию</string>
+    <string name="ai_saved">Конфигурация сохранена</string>
+    
+    <!-- Chat -->
+    <string name="chat_send">Отправить</string>
+    <string name="chat_hint">Введите сообщение...</string>
+    <string name="chat_clear">Очистить</string>
+    
+    <!-- File Manager -->
+    <string name="file_upload">Загрузить</string>
+    <string name="file_download">Скачать</string>
+    <string name="file_delete">Удалить</string>
+    <string name="file_create">Создать</string>
+    
+    <!-- Console -->
+    <string name="console_execute">Выполнить</string>
+    <string name="console_hint">Введите команду...</string>
+    <string name="console_clear">Очистить консоль</string>
+    
+    <!-- Common -->
+    <string name="loading">Загрузка...</string>
+    <string name="error">Ошибка</string>
+    <string name="success">Успешно</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">OK</string>
+</resources>
